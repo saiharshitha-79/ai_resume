@@ -6,3 +6,4 @@ numpy
 fpdf
 plotly
 google-generativeai
+bcrypt
