@@ -10,7 +10,7 @@ def rewrite_bullet_points(text, api_key):
 
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         prompt = (
             "You are an expert technical resume writer. Your task is to rewrite the "
@@ -32,7 +32,7 @@ def generate_cover_letter(resume_text, job_description, api_key):
     
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         prompt = (
             "You are a professional career coach. Write a highly tailored, compelling, "
             "and professional 3-paragraph Cover Letter. Use the details from the candidate's "
@@ -55,7 +55,7 @@ def generate_interview_questions(missing_skills, role, api_key):
         
     try:
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         skills_str = ", ".join(missing_skills)
         prompt = (
