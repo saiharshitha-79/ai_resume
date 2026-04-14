@@ -51,3 +51,40 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text).strip()
     
     return text
+
+from fpdf import FPDF
+import os
+
+def generate_pdf_report(score, present_skills, missing_skills, target_role, suggestions):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", 'B', 16)
+    pdf.cell(200, 10, txt="AI Resume ATS Analysis Report", ln=1, align='C')
+    pdf.ln(10)
+    
+    pdf.set_font("Arial", 'B', 12)
+    pdf.cell(200, 10, txt=f"Target Role: {target_role}", ln=1)
+    pdf.cell(200, 10, txt=f"ATS Score: {score}%", ln=1)
+    pdf.ln(10)
+    
+    pdf.cell(200, 10, txt="Identified Skills:", ln=1)
+    pdf.set_font("Arial", size=10)
+    pdf.multi_cell(0, 8, txt=", ".join(present_skills).title() if present_skills else "None")
+    pdf.ln(5)
+    
+    pdf.set_font("Arial", 'B', 12)
+    pdf.cell(200, 10, txt="Missing Critical Skills:", ln=1)
+    pdf.set_font("Arial", size=10)
+    pdf.multi_cell(0, 8, txt=", ".join(missing_skills).title() if missing_skills else "None")
+    pdf.ln(5)
+    
+    pdf.set_font("Arial", 'B', 12)
+    pdf.cell(200, 10, txt="Improvement Suggestions:", ln=1)
+    pdf.set_font("Arial", size=10)
+    for i, sug in enumerate(suggestions, 1):
+        safe_sug = sug.encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(0, 8, txt=f"{i}. {safe_sug}")
+        
+    report_path = "ATS_Report.pdf"
+    pdf.output(report_path)
+    return report_path

@@ -1,6 +1,6 @@
 import streamlit as st
 import plotly.express as px
-from utils import extract_text_from_pdf, clean_text
+from utils import extract_text_from_pdf, clean_text, generate_pdf_report
 from analyzer import (
     get_best_role_match, analyze_resume_for_role, generate_suggestions,
     analyze_custom_jd, evaluate_structure, analyze_action_verbs, generate_radar_chart_data
@@ -113,6 +113,19 @@ def main():
                     if missing_skills:
                         skills_html = "".join([f'<span class="skill-tag missing-skill">{skill.title()}</span>' for skill in missing_skills])
                         st.markdown(skills_html, unsafe_allow_html=True)
+                        
+                st.markdown("---")
+                # Add PDF Export
+                suggestions = generate_suggestions(missing_skills, score)
+                report_path = generate_pdf_report(score, present_skills, missing_skills, actual_role, suggestions)
+                with open(report_path, "rb") as pdf_file:
+                    st.download_button(
+                        label="📥 Download ATS Health Report (PDF)",
+                        data=pdf_file,
+                        file_name="ATS_Analysis_Report.pdf",
+                        mime="application/pdf",
+                        type="primary"
+                    )
 
         # --- TAB 2: Custom JD Match ---
         with tab2:
